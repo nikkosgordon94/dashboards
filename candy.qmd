@@ -1,0 +1,204 @@
+---
+title: "Candy Ranking"
+author: "Nikkos Gordon"
+date: 11/2/26
+format: 
+  dashboard:
+    theme: quartz
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, include=FALSE}
+library(tidyverse)
+library(dplyr)
+library(plotly)
+library(fivethirtyeight)
+#install.packages("data.table")
+library(data.table)
+
+candy <- fivethirtyeight::candy_rankings 
+
+candy <- candy |> 
+  mutate(type = case_when(
+    chocolate & fruity ~ "both",
+    chocolate ~ "chocolate",
+    fruity ~ "fruity",
+    .default = "other"
+  ))
+
+# count(candy, type)
+```
+
+## Row 1 {height="15%"}
+
+```{r}
+#| content: valuebox
+#| title: "Total Candies"
+
+list(
+  icon = "basket", 
+  color = "warning", 
+  value = nrow(candy))
+
+```
+
+```{r}
+#| content: valuebox
+#| title: "Number of Fruity Candies"
+
+
+list(
+  icon = "heart-fill",
+  color = "#E4572E",
+  value = sum(candy$type == "fruity"))
+
+```
+
+```{r}
+#| content: valuebox
+#| title: "Number of Chocolate Candies"
+
+list(
+  icon = "heart",
+  color = "#7B4B2A",
+  value = sum(candy$type == "chocolate"))
+```
+
+## Row 2
+
+```{r}
+boxplot <- ggplot(candy, aes(type, winpercent, color = type, fill = type)) + 
+  geom_boxplot(alpha = 0.15, width = 0.55, outlier.shape = NA) + 
+  geom_jitter(width = 0.1) +
+  theme_minimal() +
+  labs(y = "Win %",
+       x = "Candy Type")
+
+ggplotly(boxplot)
+```
+
+```{r}
+bar <- ggplot(candy, aes(winpercent, reorder(competitorname, winpercent), fill = type)) +
+  geom_col() +
+  theme(axis.text.y = element_text(size = 4)) +
+  labs(y = "Candy Name",
+       x = "Win %")
+
+ggplotly(bar)
+```
+
+```{r}
+candy <- candy |>
+  select(competitorname, sugarpercent, winpercent) |>
+  drop_na() |>
+  arrange(desc(sugarpercent))
+
+# Calculate statistics
+
+most_sugar <- candy |>
+  slice_max(sugarpercent, n = 1, with_ties = FALSE)
+
+least_sugar <- candy |>
+  slice_min(sugarpercent, n = 1, with_ties = FALSE)
+
+average_popularity <- mean(candy$winpercent)
+```
+
+## Overview
+
+### Row {height="20%"}
+
+```{r}
+#| content: valuebox
+#| title: "Most Sugary Candy"
+#| color: danger
+
+list(
+  icon = "candy-cane",
+  value = most_sugar$competitorname,
+  caption = paste0(
+    round(most_sugar$sugarpercent * 100, 1),
+    "% sugar"
+  )
+)
+```
+
+```{r}
+#| content: valuebox
+#| title: "Least Sugary Candy"
+#| color: success
+
+list(
+  icon = "leaf",
+  value = least_sugar$competitorname,
+  caption = paste0(
+    round(least_sugar$sugarpercent * 100, 1),
+    "% sugar"
+  )
+)
+```
+
+```{r}
+#| content: valuebox
+#| title: "Average Popularity"
+#| color: primary
+
+list(
+  icon = "chart-line",
+  value = paste0(round(average_popularity, 1), "%"),
+  caption = "Average candy popularity score"
+)
+```
+
+### Row {height="80%"}
+
+#### Research Question
+
+Does more sugar mean more popular?
+
+This dashboard explores the relationship between sugar content and candy popularity using the FiveThirtyEight candy rankings dataset.
+
+The scatterplot and regression line will help identify whether candies with higher sugar content tend to receive higher popularity scores.
+
+## Sugar vs. Popularity
+
+### Row
+
+```{r}
+#| title: "Sugar Content vs. Candy Popularity"
+#| fig-height: 6
+
+sugar_plot <- ggplot(candy,aes(x = sugarpercent, y = winpercent, 
+                               text = paste0("Candy: ", competitorname,
+                                             "<br>Sugar: ", round(sugarpercent * 100, 1), 
+                                             "%",
+                                             "<br>Popularity: ", round(winpercent, 1), "%"))) +
+  geom_point(color = "#00B8D9", size = 3, alpha = 0.8) +
+  geom_smooth(method = "lm", color = "#FF8C42", fill = "#FF8C42", alpha = 0.2) +
+  labs(x = "Sugar Percentage", y = "Popularity Score (%)", 
+       title = "Does More Sugar Mean More Popular?") +
+  theme_minimal(base_size = 13)
+
+ggplotly(sugar_plot, tooltip = "text")
+```
+
+## Candy Rankings
+
+### Row
+
+```{r}
+#| title: "Candy Rankings Data"
+
+data.table(candy |>
+                dplyr::mutate(sugarpercent = round(sugarpercent * 100, 1),
+                              winpercent = round(winpercent, 1)),
+              colnames = c("Candy", "Sugar Percentage", "Win Percentage"),
+              rownames = FALSE, options = list(
+                pageLength = 10,
+                searching = TRUE,
+                ordering = TRUE,
+                scrollX = TRUE))
+
+sugar_correlation <- cor(candy$sugarpercent, candy$winpercent)
+
+sugar_correlation
+```

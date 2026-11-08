@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "CS201 dashboard"
+  navbar:
+    right:
+      - href: index.qmd
+        text: Home
+      - href: penguins.qmd
+        text: Penguins
+      - href: candy.qmd
+        text: candy
+
+format:
+  html:
+    theme:
+      - cosmo
+    css: styles.css
+    toc: true
+
+editor: visual
