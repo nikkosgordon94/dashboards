@@ -12,7 +12,6 @@ library(tidyverse)
 library(dplyr)
 library(plotly)
 library(fivethirtyeight)
-#install.packages("data.table")
 library(data.table)
 
 candy <- fivethirtyeight::candy_rankings 
@@ -25,10 +24,11 @@ candy <- candy |>
     .default = "other"
   ))
 
-# count(candy, type)
 ```
 
-## Row 1 {height="15%"}
+#Vizualization 1
+
+## Row 1 {height="30%"}
 
 ```{r}
 #| content: valuebox
@@ -92,8 +92,6 @@ candy <- candy |>
   drop_na() |>
   arrange(desc(sugarpercent))
 
-# Calculate statistics
-
 most_sugar <- candy |>
   slice_max(sugarpercent, n = 1, with_ties = FALSE)
 
@@ -105,7 +103,11 @@ average_popularity <- mean(candy$winpercent)
 
 ## Overview
 
-### Row {height="20%"}
+#### Research Question
+
+Does more sugar mean more popular?
+
+This dashboard explores the relationship between sugar content and candy popularity using the FiveThirtyEight candy rankings dataset. The scatterplot and regression line will help identify whether candies with higher sugar content tend to receive higher popularity scores.
 
 ```{r}
 #| content: valuebox
@@ -142,26 +144,12 @@ list(
 #| title: "Average Popularity"
 #| color: primary
 
-list(
-  icon = "chart-line",
-  value = paste0(round(average_popularity, 1), "%"),
-  caption = "Average candy popularity score"
-)
+list(icon = "chart-line", 
+     value = paste0(round(average_popularity, 1), "%"),
+     caption = "Average candy popularity score")
 ```
 
-### Row {height="80%"}
-
-#### Research Question
-
-Does more sugar mean more popular?
-
-This dashboard explores the relationship between sugar content and candy popularity using the FiveThirtyEight candy rankings dataset.
-
-The scatterplot and regression line will help identify whether candies with higher sugar content tend to receive higher popularity scores.
-
 ## Sugar vs. Popularity
-
-### Row
 
 ```{r}
 #| title: "Sugar Content vs. Candy Popularity"
@@ -182,8 +170,6 @@ ggplotly(sugar_plot, tooltip = "text")
 ```
 
 ## Candy Rankings
-
-### Row
 
 ```{r}
 #| title: "Candy Rankings Data"
