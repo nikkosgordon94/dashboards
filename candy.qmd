@@ -69,7 +69,7 @@ Does more sugar mean these candies are more popular?
 
 This dashboard explores the relationship between sugar content and candy popularity using the FiveThirtyEight candy rankings dataset. The scatterplot and regression line visualizations will help identify whether candies with higher sugar content tend to receive higher popularity scores among consumers.
 
-# Win %
+# Candy Type
 
 ```{r}
 boxplot <- ggplot(candy, aes(type, winpercent, color = type, fill = type)) + 
