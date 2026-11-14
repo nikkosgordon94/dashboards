@@ -2,4 +2,4 @@
 title: "index"
 format: html
 ---
-
+Hi, this is my Dashboard where I have worked with the candies data frame from Fivethirtyeight's Candy Rankings and the Penguins data frame native to RStudio. In my Data, I focused on Sugar and popularity. Enjoy.

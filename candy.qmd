@@ -26,7 +26,7 @@ candy <- candy |>
 
 ```
 
-# Fruity vs. Chocolate Candies
+# Fruity or Chocolaty?
 
 ## Row 1 {height="15%"}
 
@@ -69,7 +69,7 @@ Does more sugar mean these candies are more popular?
 
 This dashboard explores the relationship between sugar content and candy popularity using the FiveThirtyEight candy rankings dataset. The scatterplot and regression line visualizations will help identify whether candies with higher sugar content tend to receive higher popularity scores among consumers.
 
-# Win % vs. Candy Type
+# Win %
 
 ```{r}
 boxplot <- ggplot(candy, aes(type, winpercent, color = type, fill = type)) + 
@@ -82,7 +82,7 @@ boxplot <- ggplot(candy, aes(type, winpercent, color = type, fill = type)) +
 ggplotly(boxplot)
 ```
 
-# Candy vs. Win %
+# Win % of Candies
 
 ```{r}
 bar <- ggplot(candy, aes(winpercent, reorder(competitorname, winpercent), fill = type)) +
@@ -151,10 +151,10 @@ list(icon = "chart-line",
      caption = "Average candy popularity score")
 ```
 
-# Sugar vs Popularity
+# Popularity
 
 ```{r}
-#| title: "Sugar Content vs. Candy Popularity"
+#| title: "Is more sugar more popular?"
 #| fig-height: 6
 
 sugar_plot <- ggplot(candy,aes(x = sugarpercent, y = winpercent, 
