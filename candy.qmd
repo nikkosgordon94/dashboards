@@ -171,7 +171,7 @@ sugar_plot <- ggplot(candy,aes(x = sugarpercent, y = winpercent,
 ggplotly(sugar_plot, tooltip = "text")
 ```
 
-# Candy Dataframe
+# Candy Data Frame
 
 ```{r}
 #| title: "Candy Rankings Data"

@@ -12,9 +12,9 @@ library(palmerpenguins)
 penguins <- penguins
 ```
 
-# Plots?
+# Penguin Plots
 
-## Row 1
+## Mass & Bill by Island
 
 ```{r, warning=FALSE}
 mass_by_island <- ggplot(data = penguins, aes(x = island, y = body_mass_g)) +
@@ -30,7 +30,7 @@ bill_by_island <- ggplot(penguins, aes(island, bill_length_mm)) +
 ggplotly(bill_by_island)
 ```
 
-## Row 2 {.tabset}
+## Flipper & Bill Lengths {.tabset}
 
 ```{r, warning=FALSE}
 #| title: Flipper Length by Mass
