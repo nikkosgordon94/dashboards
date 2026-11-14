@@ -26,9 +26,9 @@ candy <- candy |>
 
 ```
 
-#Vizualization 1
+# Fruity vs. Chocolate Candies
 
-## Row 1 {height="30%"}
+## Row 1 {height="15%"}
 
 ```{r}
 #| content: valuebox
@@ -63,7 +63,13 @@ list(
   value = sum(candy$type == "chocolate"))
 ```
 
-## Row 2
+#### Research Question
+
+Does more sugar mean these candies are more popular?
+
+This dashboard explores the relationship between sugar content and candy popularity using the FiveThirtyEight candy rankings dataset. The scatterplot and regression line visualizations will help identify whether candies with higher sugar content tend to receive higher popularity scores among consumers.
+
+# Win % vs. Candy Type
 
 ```{r}
 boxplot <- ggplot(candy, aes(type, winpercent, color = type, fill = type)) + 
@@ -75,6 +81,8 @@ boxplot <- ggplot(candy, aes(type, winpercent, color = type, fill = type)) +
 
 ggplotly(boxplot)
 ```
+
+# Candy vs. Win %
 
 ```{r}
 bar <- ggplot(candy, aes(winpercent, reorder(competitorname, winpercent), fill = type)) +
@@ -101,13 +109,7 @@ least_sugar <- candy |>
 average_popularity <- mean(candy$winpercent)
 ```
 
-## Overview
-
-#### Research Question
-
-Does more sugar mean more popular?
-
-This dashboard explores the relationship between sugar content and candy popularity using the FiveThirtyEight candy rankings dataset. The scatterplot and regression line will help identify whether candies with higher sugar content tend to receive higher popularity scores.
+# Candy Popularity
 
 ```{r}
 #| content: valuebox
@@ -149,7 +151,7 @@ list(icon = "chart-line",
      caption = "Average candy popularity score")
 ```
 
-## Sugar vs. Popularity
+# Sugar vs Popularity
 
 ```{r}
 #| title: "Sugar Content vs. Candy Popularity"
@@ -169,22 +171,15 @@ sugar_plot <- ggplot(candy,aes(x = sugarpercent, y = winpercent,
 ggplotly(sugar_plot, tooltip = "text")
 ```
 
-## Candy Rankings
+# Candy Dataframe
 
 ```{r}
 #| title: "Candy Rankings Data"
 
-data.table(candy |>
-                dplyr::mutate(sugarpercent = round(sugarpercent * 100, 1),
-                              winpercent = round(winpercent, 1)),
-              colnames = c("Candy", "Sugar Percentage", "Win Percentage"),
-              rownames = FALSE, options = list(
-                pageLength = 10,
-                searching = TRUE,
-                ordering = TRUE,
-                scrollX = TRUE))
+candy <- fivethirtyeight::candy_rankings 
 
-sugar_correlation <- cor(candy$sugarpercent, candy$winpercent)
+candy |> 
+  select(c(competitorname, hard, bar, sugarpercent)) 
 
-sugar_correlation
+knitr::kable(candy)
 ```

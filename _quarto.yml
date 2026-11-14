@@ -12,6 +12,10 @@ website:
         text: Penguins
       - href: candy.qmd
         text: candy
+      - icon: github
+        href: http://github.com/nikkosgordon94
+      - text: R Website
+        href: https://nikkosgordon94.github.io/
 
 format:
   html:
