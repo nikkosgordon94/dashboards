@@ -109,7 +109,7 @@ least_sugar <- candy |>
 average_popularity <- mean(candy$winpercent)
 ```
 
-# Candy Popularity
+# Most Popular
 
 ```{r}
 #| content: valuebox
